@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Input, Button, VStack, HStack, Avatar, Spacer, useToast } from '@chakra-ui/react';
+import { Box, Flex, Text, Input, Button, VStack, HStack, Avatar, Spacer, useToast, Badge } from '@chakra-ui/react';
 import { FaCircle } from 'react-icons/fa';
 import { useState } from 'react';
 
@@ -42,9 +42,11 @@ const Index = () => {
       <Flex flex="1" direction="column" p="4">
         <VStack flex="1" spacing="4" overflowY="auto">
           <Text fontSize="2xl" fontWeight="bold">Chat</Text>
-          <VStack spacing="4" align="start">
-            {messages.map(message => (
-              <Text key={message.id}>{message.text}</Text>
+          <VStack spacing="4" align="start" w="full">
+            {messages.map((message, index) => (
+              <Badge key={message.id} colorScheme={index % 2 === 0 ? "blue" : "green"} px="4" py="2" borderRadius="lg" boxShadow="md" w="fit-content" maxW="80%">
+                {message.text}
+              </Badge>
             ))}
           </VStack>
         </VStack>
