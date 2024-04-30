@@ -1,5 +1,6 @@
-import { Box, Flex, Text, Input, Button, VStack, HStack, Avatar, Spacer } from '@chakra-ui/react';
+import { Box, Flex, Text, Input, Button, VStack, HStack, Avatar, Spacer, useToast } from '@chakra-ui/react';
 import { FaCircle } from 'react-icons/fa';
+import { useState } from 'react';
 
 const contacts = [
   { id: 1, name: 'John Doe', status: 'online' },
@@ -8,6 +9,24 @@ const contacts = [
 ];
 
 const Index = () => {
+  const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const toast = useToast();
+
+  const sendMessage = () => {
+    if (inputValue.trim() === '') {
+      toast({
+        title: 'Cannot send empty message.',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+    setMessages([...messages, { id: messages.length + 1, text: inputValue }]);
+    setInputValue('');
+  };
+
   return (
     <Flex h="100vh" p="5">
       <VStack w="300px" h="full" borderRight="1px" borderColor="gray.200" spacing="4" p="4">
@@ -24,13 +43,14 @@ const Index = () => {
         <VStack flex="1" spacing="4" overflowY="auto">
           <Text fontSize="2xl" fontWeight="bold">Chat</Text>
           <VStack spacing="4" align="start">
-            <Text>Message from John Doe</Text>
-            <Text>Reply to John Doe</Text>
+            {messages.map(message => (
+              <Text key={message.id}>{message.text}</Text>
+            ))}
           </VStack>
         </VStack>
         <HStack>
-          <Input placeholder="Type a message..." />
-          <Button colorScheme="blue">Send</Button>
+          <Input placeholder="Type a message..." value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+          <Button colorScheme="blue" onClick={sendMessage}>Send</Button>
         </HStack>
       </Flex>
     </Flex>
